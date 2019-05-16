@@ -14,7 +14,7 @@ export default function App() {
       <div className="jumbotron">
         <div className="container">
           <h1 className="display-3">Go anywhere</h1>
-          <p>Enter an origin and a desination</p>
+          <p>Enter an origin and a desination to find the cheapest flights</p>
         </div>
       </div>
 
