@@ -1,22 +1,65 @@
 import React from "react";
+import Form from "./Form";
+import Results from "./Results";
 
 class Search extends React.Component {
     constructor(props) {
         super(props);
+
+        this.state = {
+            from: '',
+            to: '',
+            submitted: false
+        }
+
+        this.fromChange = this.fromChange.bind(this);
+        this.toChange = this.toChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    fromChange(event) {
+        this.setState({from: event.target.value});
+    }
+
+    toChange(event) {
+        this.setState({to: event.target.value});
+    }
+
+    handleSubmit(event) {
+        event.preventDefault();
+
+        this.setState({submitted: true});
     }
 
     render() {
-        return (
-            <div>
-                <label class="sr-only" for={this.props.label}>{this.props.label}</label>
-                <div class="input-group mb-2 mr-sm-2">
-                <div class="input-group-prepend">
-                    <div class="input-group-text">{this.props.label}</div>
+        if (!this.state.submitted) {
+            return (
+                <div>
+                    <Form
+                        from={this.state.from}
+                        to={this.state.to}
+                        fromChange={this.fromChange}
+                        toChange={this.toChange}
+                        handleSubmit={this.handleSubmit}/>
                 </div>
-                <input type="text" class="form-control" id={this.props.label}/>
+            );
+        }
+        else {
+            return (
+                <div>
+                    <Form
+                        from={this.state.from}
+                        to={this.state.to}
+                        fromChange={this.fromChange}
+                        toChange={this.toChange}
+                        handleSubmit={this.handleSubmit}/>
+    
+                    <Results
+                        from={this.state.from}
+                        to={this.state.to}/>
                 </div>
-            </div>
-        );
+            );
+        }
     }
 }
 
