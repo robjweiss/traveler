@@ -12,7 +12,9 @@ class Search extends React.Component {
             fromSuggestions: [],
             to: '',
             toSuggestions: [],
-            submitted: false
+            destPopularity: 0,
+            submitted: false,
+            newSearch: false
         }
 
         this.fromChange = this.fromChange.bind(this);
@@ -43,10 +45,30 @@ class Search extends React.Component {
         }
     }
 
-    handleSubmit(event) {
+    async handleSubmit(event) {
         event.preventDefault();
 
+        if(this.state.submitted) {
+            this.setState({newSearch: true});
+        }
+
         this.setState({submitted: true});
+
+        // Store search in redis
+        await fetch("http://localhost:4000/api", {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ to: this.state.to })
+        });
+
+        // Get destination popularity from redis
+        const res = await fetch("http://localhost:4000/api/popular/" + this.state.to);
+        const stats = await res.json();
+        this.setState({destPopularity: stats.popularity});
+        this.setState({newSearch: false});
     }
 
     async getPlaceSuggestions(query) {
@@ -95,14 +117,18 @@ class Search extends React.Component {
                 <div>
                     <Form
                         from={this.state.from}
+                        fromSuggestions={this.state.fromSuggestions}
                         to={this.state.to}
+                        toSuggestions={this.state.toSuggestions}
                         fromChange={this.fromChange}
                         toChange={this.toChange}
                         handleSubmit={this.handleSubmit}/>
     
                     <Results
                         from={this.state.from}
-                        to={this.state.to}/>
+                        to={this.state.to}
+                        destPopularity={this.state.destPopularity}
+                        newSearch={this.state.newSearch}/>
                 </div>
             );
         }

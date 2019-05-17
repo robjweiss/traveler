@@ -9,9 +9,21 @@ class Results extends React.Component {
             loading: true,
             results: []
         }
+
+        this.getResults = this.getResults.bind(this);
     }
 
     async componentWillMount() {
+        await this.getResults();
+    }
+
+    async componentWillUpdate() {
+        if (this.props.newSearch) {
+            await this.getResults();
+        }
+    }
+
+    async getResults() {
         const url = "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0/US/USD/en-US/" + this.props.from + "/" + this.props.to + "/anytime";
         const headers = rapidapi;
         try {
@@ -19,7 +31,7 @@ class Results extends React.Component {
             const data = await res.json();
 
             const results = data.Quotes.map((quote) => {
-                // TODO: apply Redis here
+                // TODO: apply Redis here?
                 let carriers = {};
                 for (const carrier of data.Carriers) {
                     carriers[carrier.CarrierId] = carrier.Name;
@@ -41,6 +53,8 @@ class Results extends React.Component {
 
             this.setState({results: results});
             this.setState({loading: false});
+
+            return true;
         } catch(e) {
             console.log(e);
         }
@@ -49,15 +63,26 @@ class Results extends React.Component {
     render() {
         if (!this.state.loading) {
             return (
-                <div class="card">
-                    <ul class="list-group list-group-flush">
-                        {this.state.results}
-                    </ul>
+                <div>
+                    <div>
+                        <p>Popularity: {this.props.destPopularity}</p>
+                    </div>
+                    <div class="card">
+                        <ul class="list-group list-group-flush">
+                            {this.state.results}
+                        </ul>
+                    </div>
                 </div>
             )
         }
         else {
-            return null;
+            return (
+                <div class="d-flex justify-content-center">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+            );
         }
     }
 }
