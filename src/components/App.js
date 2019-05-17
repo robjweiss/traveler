@@ -1,5 +1,6 @@
 import React from "react";
 import Search from "./Search";
+import Tweets from "./Tweets";
 
 export default function App() {
   return (
@@ -19,6 +20,7 @@ export default function App() {
       </div>
 
       <Search/>
+      <Tweets/>
 
       <div className="container">
       </div>

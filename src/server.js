@@ -3,15 +3,24 @@ const redis = require("redis");
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-
+const app = express();
+const http = require('http').Server(app);
+const io = require("socket.io")(http);
 const client = redis.createClient();
+const twitterKeys = require("../config/twitter.json");
+const tweetStream = require("node-tweet-stream")(twitterKeys);
 
 bluebird.promisifyAll(redis.RedisClient.prototype);
 bluebird.promisifyAll(redis.Multi.prototype);
 
-const app = express();
 app.use(bodyParser.json());
 app.use(cors());
+
+tweetStream.track("traveler CS554");
+
+tweetStream.on("tweet", function(tweet) {
+    io.emit("tweet", tweet);
+});
 
 
 app.post("/api", async (req, res) => {
@@ -63,6 +72,6 @@ app.get("*", (req, res) => {
     res.status(404).send("Page not found");
 });
 
-app.listen(4000, () => {
+http.listen(4000, () => {
     console.log("Express server running on http://localhost:4000");
 });
