@@ -12,4 +12,5 @@ A travel site
     }
     ````
 4. Install dependencies with `npm install`
+5. Ensure Redis is running
 5. Start the project with `npm start`
