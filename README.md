@@ -11,6 +11,17 @@ A travel site
         "X-RapidAPI-Key": <KEY>
     }
     ````
+3. Apply for access to the [Twitter API](https://developer.twitter.com/en/apply-for-access)
+4. Create another file `twitter.json` within the `config` folder
+5. Populate it with your keys and tokens like so:
+    ````
+    {
+        "consumer_key": <CONSUMER_KEY>,
+        "consumer_secret": <CONSUMER_SECRET>,
+        "token": <TOKEN>,
+        "token_secret": <TOKEN_SECRET>
+    }
+    ````
 4. Install dependencies with `npm install`
 5. Ensure Redis is running
 5. Start the project with `npm start`
