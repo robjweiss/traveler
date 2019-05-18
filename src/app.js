@@ -6,10 +6,19 @@ import App from "./components/App";
 import { Map } from './components/Map';
 import $ from "jquery";
 import haversine from "haversine";
+const htmlToImage = require('html-to-image');
+import download from "downloadjs";
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 ReactDOM.render(<App />, document.getElementById("app"));
+
 var map;
 var markers = [];
-const AVERAGE_PLANE_SPEED_MPH = 561;
+const AVERAGE_PLANE_SPEED_MPH = 500;
+//Cruise speed between 547–575 mph, so I'm going to go with ~500 including liftoff/landing
+
+
+
 document.addEventListener("DOMContentLoaded", function() {
   let mapElement = document.getElementById('map');
   Map.loadGoogleMapsApi().then(function(googleMaps) {
@@ -68,6 +77,26 @@ $('form').on('submit', function(e){
 	
 });
 
+
+
+$('button#img').on('click', function(e){
+htmlToImage.toPng(document.getElementById('body'))
+  .then(function (dataUrl) {
+    download(dataUrl, 'my-screenshot.png');
+  });
+});
+
+$('button#pdf').on('click', function(e){
+	const filename  = 'my-pdf.pdf';
+	$('#map').css('display','none');
+	html2canvas(document.getElementById('body')).then(canvas => {
+		let pdf = new jsPDF('p', 'mm', 'a4');
+		pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 211, 298);
+		pdf.save(filename);
+		$('#map').css('display','block');
+	});
+
+});
 if (module.hot) {
   module.hot.accept();
 }
