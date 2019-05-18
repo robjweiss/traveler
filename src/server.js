@@ -16,7 +16,7 @@ bluebird.promisifyAll(redis.Multi.prototype);
 app.use(bodyParser.json());
 app.use(cors());
 
-tweetStream.track("traveler CS554");
+tweetStream.track("flights");
 
 tweetStream.on("tweet", function(tweet) {
     io.emit("tweet", tweet);

@@ -29,7 +29,6 @@ class Results extends React.Component {
         try {
             const res = await fetch(url, {headers: headers});
             const data = await res.json();
-
             const results = data.Quotes.map((quote) => {
                 // TODO: apply Redis here?
                 let carriers = {};

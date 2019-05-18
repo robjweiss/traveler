@@ -27,7 +27,7 @@ class Tweets extends React.Component {
         return (
             <div class="card">
                 <div class="card-header text-center">
-                    Tweets
+                    Recent Tweets
                 </div>
                 <div class="card-body scroll">
                     <ul class="list-group list-group-flush">

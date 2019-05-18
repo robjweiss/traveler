@@ -14,7 +14,8 @@ class Search extends React.Component {
             toSuggestions: [],
             destPopularity: 0,
             submitted: false,
-            newSearch: false
+            newSearch: false,
+			cities: []
         }
 
         this.fromChange = this.fromChange.bind(this);
@@ -82,6 +83,7 @@ class Search extends React.Component {
 
                 const suggestions = data.Places.map((place) => {
                     return(
+
                         <option key={place.PlaceId} value={place.PlaceId} label={place.PlaceName}/>
                     );
                 });
